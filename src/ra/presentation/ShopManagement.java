@@ -17,7 +17,7 @@ public class ShopManagement {
             System.out.println("2. Quản lý đơn hàng");
             System.out.println("3. Thoát \n");
             System.out.println("***********************+++++++******************** ");
-            System.out.println("Chọn chức năng: 1-3");
+            System.out.print("Chọn chức năng 1-3: ");
             int choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
                 case 1:
@@ -41,7 +41,7 @@ public class ShopManagement {
             System.out.println("2. Thêm mới khách hàng ");
             System.out.println("3. Thoát         \n");
             System.out.println("******************************************************");
-            System.out.println("Mời lựa chọn : 1-3");
+            System.out.print("Chọn chức năng 1-3: ");
             int choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
                 case 1:
@@ -61,7 +61,7 @@ public class ShopManagement {
     private static void managerOrders(Scanner sc) {
         OrderBusiness order = new OrderBusiness();
         while (true) {
-            System.out.println("*************************ORDER MENU******************** \n");
+            System.out.println("\n*************************ORDER MENU******************** ");
             System.out.println("1. Danh sách đơn hàng");
             System.out.println("2. Thêm mới đơn hàng");
             System.out.println("3. Cập nhật trạng thái đơn hàng");
@@ -70,7 +70,7 @@ public class ShopManagement {
             System.out.println("6. Tính tổng doanh thu các đơn hàng đã giao");
             System.out.println("7. Thoát");
             System.out.println("********************************************************");
-            System.out.println("Mời bạn lựa chọn : 1 - 7");
+            System.out.print("Chọn chức năng 1-7: ");
             int choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
                 case 1:
@@ -84,10 +84,7 @@ public class ShopManagement {
                     break;
                 case 4:
                     List<Order> overdue = order.getOrderOverdue();
-                    System.out.println("Danh sách đơn hàng quá hạn:");
-                    for (Order o : overdue) {
-                        System.out.println(o);
-                    }
+                    displayOverdueOrders(overdue);
                     break;
                 case 5:
                     List<Order> delivered = order.getOrderDelivied();
@@ -106,5 +103,31 @@ public class ShopManagement {
                     System.out.println("Lựa chọn không hợp lệ. Vui lòng chọn lại");
             }
         }
+    }
+
+    private static void displayOverdueOrders(List<Order> overdueOrders) {
+        if (overdueOrders.isEmpty()) {
+            System.out.println("Không có đơn hàng nào quá hạn!!!");
+            return;
+        }
+
+        // Tiêu đề bảng
+        System.out.println("\n======================== DANH SÁCH ĐƠN HÀNG QUÁ HẠN ========================");
+        System.out.printf("%-10s %-20s %-20s %-15s %-15s\n",
+                "ID ĐƠN", "KHÁCH HÀNG", "NGÀY ĐẶT HÀNG", "TỔNG TIỀN", "TRẠNG THÁI");
+        System.out.println("------------------------------------------------------------------------");
+
+        // Hiển thị từng đơn hàng
+        for (Order o : overdueOrders) {
+            System.out.printf("%-10d %-20s %-20s %-15.2f %-15s\n",
+                    o.getId(),
+                    o.getCustomer().getCus_name(),
+                    o.getOrderDate(),
+                    o.getTotalAmount(),
+                    "Chưa giao");
+        }
+
+        System.out.println("========================================================================");
+        System.out.printf("Tổng số đơn hàng quá hạn: %d\n", overdueOrders.size());
     }
 }

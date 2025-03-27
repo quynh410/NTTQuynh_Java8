@@ -10,6 +10,7 @@ public class Customer implements IApp {
     private Optional<String> email;
 
     public Customer() {
+        this.id = idCounter++;
     }
 
     public Customer(String cus_name, Optional<String> email) {
@@ -51,13 +52,14 @@ public class Customer implements IApp {
     }
 
     @Override
-    public void inputData(Scanner sc) {
-        System.out.println("Nhập tên khách hàng: ");
-        this.cus_name = sc.nextLine();
-        System.out.println("Nhập email khách hàng: ");
-        String emailInput = sc.nextLine();
-        this.email = emailInput.isEmpty() ? Optional.empty() : Optional.of(emailInput);
+    public void inputData(Scanner scanner) {
+        System.out.print("Nhập tên khách hàng: ");
+        this.cus_name = scanner.nextLine();
+        System.out.print("Nhập email (nhấn Enter nếu không có): ");
+        String inputEmail = scanner.nextLine();
+        this.email = inputEmail.isEmpty() ? Optional.empty() : Optional.of(inputEmail);
     }
+
 
     @Override
     public String toString() {

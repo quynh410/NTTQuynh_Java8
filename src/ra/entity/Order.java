@@ -1,10 +1,12 @@
 package ra.entity;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Order implements IApp {
-    private  static int idCounter = 1;
+    private static int idCounter = 1;
     private int id;
     private Customer customer;
     private LocalDate orderDate;
@@ -12,22 +14,45 @@ public class Order implements IApp {
     private Boolean status;
 
     public Order() {
+        this.id = idCounter++;
     }
 
-    public Order(int id, Customer customer, LocalDate orderDate, Double totalAmount, Boolean status) {
+    public Order(Customer customer, LocalDate orderDate, Double totalAmount) {
         this.id = idCounter++;
         this.customer = customer;
         this.orderDate = orderDate;
         this.totalAmount = totalAmount;
-        this.status = status;
+        this.status = false;
     }
 
-    public static int getIdCounter() {
-        return idCounter;
-    }
+    @Override
+    public void inputData(Scanner sc) {
+        while (true) {
+            try {
+                System.out.println("Nhập ngày đặt hàng (dd/MM/yyyy):");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                this.orderDate = LocalDate.parse(sc.nextLine(), formatter);
+                break;
+            } catch (DateTimeParseException e) {
+                System.out.println("Định dạng ngày không hợp lệ. Vui lòng nhập theo định dạng dd/MM/yyyy");
+            }
+        }
 
-    public static void setIdCounter(int idCounter) {
-        Order.idCounter = idCounter;
+        while (true) {
+            try {
+                System.out.println("Nhập tổng tiền đơn hàng:");
+                this.totalAmount = Double.parseDouble(sc.nextLine());
+                if (this.totalAmount <= 0) {
+                    System.out.println("Tổng tiền phải là số dương.");
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Tổng tiền phải là số hợp lệ.");
+            }
+        }
+
+        this.status = false;
     }
 
     public int getId() {
@@ -70,15 +95,6 @@ public class Order implements IApp {
         this.status = status;
     }
 
-    @Override
-    public void inputData(Scanner sc) {
-        System.out.println("Nhập ngày đặt hàng dd/mm/yyyy");
-        this.orderDate  = LocalDate.parse(sc.nextLine());
-        System.out.println("Nhập tổng tiền đơn hàng: ");
-        this.totalAmount = Double.parseDouble(sc.nextLine());
-        this.status = false;
-
-    }
 
     @Override
     public String toString() {
