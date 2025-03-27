@@ -64,6 +64,8 @@ public class OrderBusiness implements IOrderBusiness{
     @Override
     public List<Order> getOrderDelivied() {
         // lấy danh sách các đơn hàng đã giao
-        return ;
+        return orders.stream()
+                .filter(order -> order.getStatus())
+                .collect(Collectors.toList());
     }
 }
